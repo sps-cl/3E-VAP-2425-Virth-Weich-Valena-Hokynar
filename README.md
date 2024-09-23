@@ -3,3 +3,6 @@ Webová verze hry Dáma, pravidla dostupná [zde](https://www.zatrolene-hry.cz/s
 
 ## Dokumentace
 Use case diagram
+[Obrázek](usecase.png)
+
+[Návrh](navrh_virth.bmp)
