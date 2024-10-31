@@ -1,0 +1,44 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Socket.io hra</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- Remove the reference to server.js; it's not needed here -->
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div id="buttons">
+    <button id="myButton">Tlačítko</button>
+  </div>
+
+  <script>
+    const socket = io();
+
+    
+    socket.on("connect", () => {
+      console.log("Connected to the server:", socket.id);
+    });
+
+    // odesílání dat
+    document.getElementById('myButton').addEventListener('click', () => {
+      const data = "test"; // data co se posílají
+      socket.emit("pohybKameneClient"/* <—— Název eventu, který posílá klinent*/, data);
+    });
+
+    // příjmaní dat
+    socket.on("pohybKameneServer" /* <—— Název eventu, který posílá server*/, (data) => {
+      console.log("Received from server:", data);
+    });
+
+    
+    socket.on("disconnect", () => {
+      console.log("Disconnected from the server");
+    });
+  </script>
+</body>
+
+</html>
