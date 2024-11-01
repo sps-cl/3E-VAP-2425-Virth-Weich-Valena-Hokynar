@@ -1,121 +1,16 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Online Dáma</title>
-  <style>
-    #board {
-      display: grid;
-      grid-template-columns: repeat(8, 50px);
-      grid-template-rows: repeat(8, 50px);
-      width: 400px;
-      margin: 20px auto;
-      border: 2px solid #333;
-    }
-    .tile {
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 36px;
-      cursor: pointer;
-    }
-    .black { background-color: #769656; }
-    .white { background-color: #eeeed2; }
-    .piece {
-      font-size: 36px;
-      cursor: pointer;
-    }
-    .black-piece { color: black; }
-    .white-piece { color: white; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <h1 style="text-align: center;">Online Dáma</h1>
   <div id="board"></div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const board = document.getElementById("board");
-
-    const initialBoardState = [
-      ["", "⚫", "", "⚫", "", "⚫", "", "⚫"],
-      ["⚫", "", "⚫", "", "⚫", "", "⚫", ""],
-      ["", "⚫", "", "⚫", "", "⚫", "", "⚫"],
-      ["", "", "", "", "", "", "", ""],
-      ["", "", "", "", "", "", "", ""],
-      ["⚪", "", "⚪", "", "⚪", "", "⚪", ""],
-      ["", "⚪", "", "⚪", "", "⚪", "", "⚪"],
-      ["⚪", "", "⚪", "", "⚪", "", "⚪", ""]
-    ];
-
-    let selectedPiece = null;
-    let selectedTile = null;
-
-    function renderBoard(boardState) {
-      board.innerHTML = "";
-      for (let row = 0; row < 8; row++) {
-        for (let col = 0; col < 8; col++) {
-          const tile = document.createElement("div");
-          tile.classList.add("tile");
-          tile.classList.add((row + col) % 2 === 0 ? "white" : "black");
-          tile.dataset.row = row;
-          tile.dataset.col = col;
-          
-          const piece = boardState[row][col];
-          if (piece) {
-            const pieceEl = document.createElement("span");
-            pieceEl.classList.add("piece");
-            pieceEl.classList.add(piece === "⚫" ? "black-piece" : "white-piece");
-            pieceEl.textContent = piece;
-            tile.appendChild(pieceEl);
-          }
-          
-          tile.addEventListener("click", () => onTileClick(tile));
-          board.appendChild(tile);
-        }
-      }
-    }
-
-    function onTileClick(tile) {
-      const row = tile.dataset.row;
-      const col = tile.dataset.col;
-      const piece = tile.textContent;
-
-      if (selectedPiece) {
-        movePiece(selectedTile.dataset.row, selectedTile.dataset.col, row, col);
-        selectedPiece = null;
-        selectedTile = null;
-      } else if (piece) {
-        selectedPiece = piece;
-        selectedTile = tile;
-      }
-    }
-
-    function movePiece(fromRow, fromCol, toRow, toCol) {
-      socket.emit("move", { from: { row: fromRow, col: fromCol }, to: { row: toRow, col: toCol } });
-    }
-
-    function updateBoard(move) {
-      const { from, to } = move;
-      const piece = initialBoardState[from.row][from.col];
-      initialBoardState[from.row][from.col] = "";
-      initialBoardState[to.row][to.col] = piece;
-      renderBoard(initialBoardState);
-    }
-
-    socket.on("init", (boardState) => {
-      renderBoard(boardState);
-    });
-
-    socket.on("move", (move) => {
-      updateBoard(move);
-    });
-
-    renderBoard(initialBoardState);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>

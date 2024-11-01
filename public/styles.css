@@ -1,0 +1,22 @@
+#board {
+  display: grid;
+  grid-template-columns: repeat(8, 50px);
+  grid-template-rows: repeat(8, 50px);
+  gap: 0;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+}
+.black { background-color: #769656; }
+.white { background-color: #eeeed2; }
+.piece {
+  font-size: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.black-piece { color: black; }
+.white-piece { color: white; }
