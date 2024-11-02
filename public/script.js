@@ -6,6 +6,7 @@ const cols = 8;
 let selectedPiece = null;
 
 
+// vytvoření tabulky
 function createBoard() {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
@@ -36,6 +37,7 @@ function createBoard() {
   }
 }
 
+// omezení skoků. Lze skákat pouze o 1 políčko úhlopříčně.
 function isValidMove(startCell, endCell) {
   const startRow = parseInt(startCell.dataset.row);
   const startCol = parseInt(startCell.dataset.col);
@@ -53,7 +55,7 @@ function isValidMove(startCell, endCell) {
     return true;
   }
 
-  if (colDiff === 2 && rowDiff === 2 * direction) {
+  if (colDiff === 2 && rowDiff === 2 * direction && !endCell.querySelector(".piece")) {
     const middleRow = (startRow + endRow) / 2;
     const middleCol = (startCol + endCol) / 2;
     const middleCell = board.querySelector(`[data-row='${middleRow}'][data-col='${middleCol}']`);

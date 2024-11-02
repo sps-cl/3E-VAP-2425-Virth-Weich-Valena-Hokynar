@@ -1,7 +1,7 @@
 problemy:
 
 1. hrac muze hrat kolikrat po sobe chce (tahy se nestridaji)
-2. hrac muze vzit figurku i kdyz je chranena (vice figurek v jednom poli a prekryvaji se)
+DONE DONE DONE 2. hrac muze vzit figurku i kdyz je chranena (vice figurek v jednom poli a prekryvaji se) DONE DONE DONE 
 3. hrac nemuze udelat 2 tahy pokud je mozno (pokud je moznost vyradit 2 figurky naraz)
 
 co dodelat:
