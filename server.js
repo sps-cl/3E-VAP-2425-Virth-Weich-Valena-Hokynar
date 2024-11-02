@@ -12,18 +12,22 @@ app.use(express.static("public"));
 
 // https://stackoverflow.com/questions/10058226/send-response-to-all-clients-except-sender#answer-10099325
 io.on("connection", (socket) => {
-  console.log("User connected: ${socket.id}");
+  console.log(`User connected: ${socket.id}`);
 
-  socket.on("pohybKameneClient" /* <—— název eventu, který posílá klient */, (data) => {
-    socket.broadcast.emit("pohybKameneServer" /* <—— Název eventu, který posílá server */, data);
+  socket.on("pohybKameneClient" /* <—— název eventu, který posílá klient */, (moveData) => {
+    socket.broadcast.emit("pohybKameneServer" /* <—— Název eventu, který posílá server */, moveData);
   });
 
+  socket.on("capture", (captureData) => {
+    socket.broadcast.emit("captureServer", captureData);
+  })
+
   socket.on("disconnect", () => {
-    console.log("User disconnected: ${socket.id}");
+    console.log(`User disconnected: ${socket.id}`);
   });
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-  console.log("Server listening on port ${PORT}");
+  console.log(`Server listening on port ${PORT}`);
 });

@@ -7,8 +7,11 @@
   height: 400px;
   margin: 0 auto;
 }
+
 .black { background-color: #769656; }
+
 .white { background-color: #eeeed2; }
+
 .piece {
   font-size: 36px;
   cursor: pointer;
@@ -18,5 +21,11 @@
   width: 100%;
   height: 100%;
 }
+
 .black-piece { color: black; }
+
 .white-piece { color: white; }
+
+.selected {
+  background-color: #ff0000;
+}
