@@ -1,4 +1,3 @@
-
 const socket = io();
 const board = document.getElementById('board');
 const rows = 8;
@@ -78,37 +77,6 @@ function isValidMove(startCell, endCell) {
 }
 
 
-function onCellClick(event) {
-  const cell = event.currentTarget;
-  const piece = cell.querySelector('.piece');
-
-  if (selectedPiece) {
-    selectedPiece.classList.remove("selected");
-    const startCell = selectedPiece.parentElement;
-
-    if (isValidMove(startCell, cell)) {
-      const moveData = {
-        fromRow: startCell.dataset.row,
-        fromCol: startCell.dataset.col,
-        toRow: cell.dataset.row,
-        toCol: cell.dataset.col,
-      };
-
-      cell.appendChild(selectedPiece);
-      socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
-
-      selectedPiece = null;
-    }
-  } else if (piece) {
-    selectedPiece = piece;
-  }
-
-  if (piece) {
-    selectedPiece = piece;
-    selectedPiece.classList.add("selected");
-  }
-}
-
 // Funkce, ktera konroluje kdo je na tahu
 let currentPlayer = 'white';
 
@@ -126,26 +94,35 @@ function onCellClick(event) {
   const piece = cell.querySelector('.piece');
 
   if (selectedPiece) {
-    selectedPiece.classList.remove("selected");
-    const startCell = selectedPiece.parentElement;
+    if (piece && isCurrentPlayerPiece(piece)) {
+      // Zrusi vyber momentalne vybrane figurky a vybere novou 
+      selectedPiece.classList.remove("selected");
+      selectedPiece = piece;
+      selectedPiece.classList.add("selected");
+    } else {
+      selectedPiece.classList.remove("selected");
+      const startCell = selectedPiece.parentElement;
 
-    if (isValidMove(startCell, cell)) {
-      const moveData = {
-        fromRow: startCell.dataset.row,
-        fromCol: startCell.dataset.col,
-        toRow: cell.dataset.row,
-        toCol: cell.dataset.col,
-      };
+      if (isValidMove(startCell, cell)) {
+        const moveData = {
+          fromRow: startCell.dataset.row,
+          fromCol: startCell.dataset.col,
+          toRow: cell.dataset.row,
+          toCol: cell.dataset.col,
+        };
 
-      cell.appendChild(selectedPiece);
-      socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
+        cell.appendChild(selectedPiece);
+        socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
 
-      selectedPiece = null;
-      switchPlayer();
+        selectedPiece = null;
+        switchPlayer();
+      } else {
+        selectedPiece = null;
+      }
     }
   } else if (piece && isCurrentPlayerPiece(piece)) {
     selectedPiece = piece;
-    selectedPiece.classList.add("selected");
+    piece.classList.add("selected");
   }
 }
 
@@ -161,7 +138,6 @@ socket.on("pohybKameneServer", (moveData) => {
   if (piece && !endCell.querySelector('.piece')) {
     endCell.appendChild(piece);
   }
-  
 });
 
 socket.on("captureServer", (captureData) => {
