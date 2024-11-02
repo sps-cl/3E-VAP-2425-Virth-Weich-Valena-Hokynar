@@ -109,6 +109,46 @@ function onCellClick(event) {
   }
 }
 
+// Funkce, ktera konroluje kdo je na tahu
+let currentPlayer = 'white';
+
+function switchPlayer() {
+  currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+}
+
+function isCurrentPlayerPiece(piece) {
+  return piece && piece.dataset.color === currentPlayer;
+}
+
+// Funkce, ktera umoznuje pohyb kamene pokud je hrac na tahu
+function onCellClick(event) {
+  const cell = event.currentTarget;
+  const piece = cell.querySelector('.piece');
+
+  if (selectedPiece) {
+    selectedPiece.classList.remove("selected");
+    const startCell = selectedPiece.parentElement;
+
+    if (isValidMove(startCell, cell)) {
+      const moveData = {
+        fromRow: startCell.dataset.row,
+        fromCol: startCell.dataset.col,
+        toRow: cell.dataset.row,
+        toCol: cell.dataset.col,
+      };
+
+      cell.appendChild(selectedPiece);
+      socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
+
+      selectedPiece = null;
+      switchPlayer();
+    }
+  } else if (piece && isCurrentPlayerPiece(piece)) {
+    selectedPiece = piece;
+    selectedPiece.classList.add("selected");
+  }
+}
+
 // příjímaní event pohybu
 socket.on("pohybKameneServer", (moveData) => {
   console.log("moveData: ", moveData);
@@ -135,4 +175,3 @@ socket.on("captureServer", (captureData) => {
 });
 
 createBoard();
-
