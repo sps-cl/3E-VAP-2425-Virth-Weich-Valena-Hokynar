@@ -2,7 +2,7 @@ problemy:
 DONE DONE DONE 1. hrac muze hrat kolikrat po sobe chce (tahy se nestridaji) DONE DONE DONE
 DONE DONE DONE 2. hrac muze vzit figurku i kdyz je chranena (vice figurek v jednom poli a prekryvaji se) DONE DONE DONE 
 3. hrac nemuze udelat 2 tahy pokud je mozno (pokud je moznost vyradit 2 figurky naraz)
-4. Hrac si muze vybrat s kterou figurkou tahat pouze jeden. Pokud si rozmyslel tah a chce si zvolit jinou figurku tak nemuze.
+DONE DONE DONE 4. Hrac si muze vybrat s kterou figurkou tahat pouze jednou. Pokud si rozmyslel tah a chce si zvolit jinou figurku tak nemuze. DONE DONE DONE
 
 Co dodelat:
 1. promotovani na damu
