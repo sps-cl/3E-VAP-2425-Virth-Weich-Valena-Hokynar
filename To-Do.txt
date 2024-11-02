@@ -4,7 +4,7 @@ DONE DONE DONE 2. hrac muze vzit figurku i kdyz je chranena (vice figurek v jedn
 3. hrac nemuze udelat 2 tahy pokud je mozno (pokud je moznost vyradit 2 figurky naraz)
 4. Hrac si muze vybrat s kterou figurkou tahat pouze jeden. Pokud si rozmyslel tah a chce si zvolit jinou figurku tak nemuze.
 
-co dodelat:
+Co dodelat:
 1. promotovani na damu
 2. vyherni obrazovka a restart hry
 
