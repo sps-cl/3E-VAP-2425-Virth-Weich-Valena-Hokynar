@@ -22,6 +22,19 @@
   height: 100%;
 }
 
+.piece.king {
+  position: relative;
+}
+
+.piece.king::after {
+  content: '👑';
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 24px;
+  color: gold;
+}
+
 .black-piece { color: black; }
 
 .white-piece { color: white; }

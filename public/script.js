@@ -4,7 +4,6 @@ const rows = 8;
 const cols = 8;
 let selectedPiece = null;
 
-
 // vytvoření tabulky
 function createBoard() {
   for (let row = 0; row < rows; row++) {
@@ -46,36 +45,91 @@ function isValidMove(startCell, endCell) {
 
   if (!piece) return false;
 
+  const isKing = piece.classList.contains('king');
   const direction = piece.dataset.color === 'black' ? 1 : -1;
   const rowDiff = endRow - startRow;
   const colDiff = Math.abs(endCol - startCol);
 
-  if (colDiff === 1 && rowDiff === direction && !endCell.querySelector('.piece')) {
-    return true;
-  }
-
-  if (colDiff === 2 && rowDiff === 2 * direction && !endCell.querySelector(".piece")) {
-    const middleRow = (startRow + endRow) / 2;
-    const middleCol = (startCol + endCol) / 2;
-    const middleCell = board.querySelector(`[data-row='${middleRow}'][data-col='${middleCol}']`);
-    const middlePiece = middleCell.querySelector('.piece');
-
-    if (middlePiece && middlePiece.dataset.color !== piece.dataset.color) {
-      const captureData = {
-        row: middleRow,
-        col: middleCol,
-        color: middlePiece.dataset.color,
-      };
-
-      socket.emit("capture", captureData);
-      middleCell.removeChild(middlePiece); 
+  if (isKing) {
+    // Kral se muze pohybovat o 1 policko uhlopricne v jakemkoliv smeru
+    if (colDiff === 1 && Math.abs(rowDiff) === 1 && !endCell.querySelector('.piece')) {
       return true;
+    }
+    // Kral muze skakat pres figurku soupere
+    if (colDiff === 2 && Math.abs(rowDiff) === 2 && !endCell.querySelector('.piece')) {
+      const middleRow = (startRow + endRow) / 2;
+      const middleCol = (startCol + endCol) / 2;
+      const middleCell = board.querySelector(`[data-row='${middleRow}'][data-col='${middleCol}']`);
+      const middlePiece = middleCell.querySelector('.piece');
+
+      if (middlePiece && middlePiece.dataset.color !== piece.dataset.color) {
+        const captureData = {
+          row: middleRow,
+          col: middleCol,
+          color: middlePiece.dataset.color,
+        };
+
+        socket.emit("capture", captureData);
+        middleCell.removeChild(middlePiece);
+        return true;
+      }
+    }
+  } else {
+    // obycejna figurka se muze pohybovat pouze o 1 policko uhlopricne dopredu
+    if (colDiff === 1 && rowDiff === direction && !endCell.querySelector('.piece')) {
+      return true;
+    }
+    // Obycejna figurka muze skakat pres figurku soupere
+    if (colDiff === 2 && rowDiff === 2 * direction && !endCell.querySelector(".piece")) {
+      const middleRow = (startRow + endRow) / 2;
+      const middleCol = (startCol + endCol) / 2;
+      const middleCell = board.querySelector(`[data-row='${middleRow}'][data-col='${middleCol}']`);
+      const middlePiece = middleCell.querySelector('.piece');
+
+      if (middlePiece && middlePiece.dataset.color !== piece.dataset.color) {
+        const captureData = {
+          row: middleRow,
+          col: middleCol,
+          color: middlePiece.dataset.color,
+        };
+
+        socket.emit("capture", captureData);
+        middleCell.removeChild(middlePiece);
+        return true;
+      }
     }
   }
 
   return false;
 }
 
+function promoteToKing(piece) {
+  piece.classList.add('king');
+}
+
+function isPromotionRow(row, piece) {
+  const pieceColor = piece.dataset.color;
+  return (pieceColor === 'white' && row === '0') || (pieceColor === 'black' && row === '7');
+}
+
+function handleMove(startCell, endCell, piece) {
+  const moveData = {
+    fromRow: startCell.dataset.row,
+    fromCol: startCell.dataset.col,
+    toRow: endCell.dataset.row,
+    toCol: endCell.dataset.col,
+  };
+
+  endCell.appendChild(piece);
+  socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
+
+  if (isPromotionRow(endCell.dataset.row, piece)) {
+    promoteToKing(piece);
+  }
+
+  selectedPiece = null;
+  switchPlayer();
+}
 
 // Funkce, ktera konroluje kdo je na tahu
 let currentPlayer = 'white';
@@ -87,7 +141,6 @@ function switchPlayer() {
 function isCurrentPlayerPiece(piece) {
   return piece && piece.dataset.color === currentPlayer;
 }
-
 // Funkce, ktera umoznuje pohyb kamene pokud je hrac na tahu
 function onCellClick(event) {
   const cell = event.currentTarget;
@@ -114,6 +167,10 @@ function onCellClick(event) {
         cell.appendChild(selectedPiece);
         socket.emit("pohybKameneClient", moveData); // odesílání event pohybu na server
 
+        if (isPromotionRow(cell.dataset.row, selectedPiece)) {
+          promoteToKing(selectedPiece);
+        }
+
         selectedPiece = null;
         switchPlayer();
       } else {
@@ -137,6 +194,9 @@ socket.on("pohybKameneServer", (moveData) => {
   const piece = startCell.querySelector('.piece');
   if (piece && !endCell.querySelector('.piece')) {
     endCell.appendChild(piece);
+    if (isPromotionRow(toRow, piece)) {
+      promoteToKing(piece);
+    }
   }
 });
 
