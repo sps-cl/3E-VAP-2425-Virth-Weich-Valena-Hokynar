@@ -42,3 +42,37 @@
 .selected {
   background-color: #ff0000;
 }
+.winningOverlayBlack,
+.winningOverlayWhite {
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+}
+
+.winningOverlayBlack h1,
+.winningOverlayWhite h1 {
+  font-size: 3em;
+  color: black;
+  margin-bottom: 20px;
+}
+
+.resetBtn {
+  display: block;
+  position: absolute;
+  margin-top: 150px;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  color: white;
+  background-color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

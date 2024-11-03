@@ -22,9 +22,18 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("captureServer", captureData);
   })
 
+  socket.on("reset", () => {
+    io.emit("reset");
+  })
+
   socket.on("disconnect", () => {
     console.log(`User disconnected: ${socket.id}`);
   });
+
+  socket.on("win", (winner) => {
+    io.emit("win", (winner));
+  })
+
 });
 
 const PORT = process.env.PORT || 3000;

@@ -3,6 +3,8 @@ const board = document.getElementById('board');
 const rows = 8;
 const cols = 8;
 let selectedPiece = null;
+let blackPieceNum = 12;
+let whitePieceNum = 12;
 
 // vytvoření tabulky
 function createBoard() {
@@ -69,6 +71,22 @@ function isValidMove(startCell, endCell) {
           color: middlePiece.dataset.color,
         };
 
+        if (middlePiece.dataset.color === "black") {
+          blackPieceNum -= 1;
+          console.log("černý:" + blackPieceNum);
+          if (blackPieceNum === 0 ) {
+            winWhite();
+          }
+        } else {
+          if (middlePiece.dataset.color === "white") {
+              whitePieceNum -= 1;
+              console.log("bílý:" + whitePieceNum);
+              if (whitePieceNum === 0) {
+              winBlack();
+            }
+          }
+        }
+
         socket.emit("capture", captureData);
         middleCell.removeChild(middlePiece);
         return true;
@@ -92,6 +110,22 @@ function isValidMove(startCell, endCell) {
           col: middleCol,
           color: middlePiece.dataset.color,
         };
+
+        if (middlePiece.dataset.color === "black") {
+          blackPieceNum -= 1;
+          console.log("černý:" + blackPieceNum);
+          if (blackPieceNum === 0 ) {
+            winWhite();
+          }
+        } else {
+          if (middlePiece.dataset.color === "white") {
+              whitePieceNum -= 1;
+              console.log("bílý:" + whitePieceNum);
+              if (whitePieceNum === 0) {
+              winBlack();
+            }
+          }
+        }
 
         socket.emit("capture", captureData);
         middleCell.removeChild(middlePiece);
@@ -209,5 +243,31 @@ socket.on("captureServer", (captureData) => {
     middleCell.removeChild(middlePiece);
   }
 });
+
+function reset () {
+  socket.emit("reset");
+}
+
+socket.on("reset", () => {
+  location.reload();
+})
+
+function winBlack () {
+  socket.emit("win", "black");
+}
+
+function winWhite () {
+  socket.emit("win", "white");
+}
+
+socket.on("win", (winner) => {
+  if (winner === "black") {
+    const overlayBlack = document.getElementsByClassName("winningOverlayBlack")[0];
+    overlayBlack.style.display = "flex";
+  } else {
+    const overlayWhite = document.getElementsByClassName("winningOverlayWhite")[0];
+    overlayWhite.style.display = "flex";
+  }
+})
 
 createBoard();

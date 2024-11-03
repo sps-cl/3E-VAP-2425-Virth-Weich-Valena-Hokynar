@@ -6,7 +6,7 @@ DONE DONE DONE 4. Hrac si muze vybrat s kterou figurkou tahat pouze jednou. Poku
 
 Co dodelat:
 DONE DONE DONE 1. promotovani na damu DONE DONE DONE
-2. vyherni obrazovka a restart hry
+DONE DONE DONE 2. vyherni obrazovka a restart hry DONE DONE DONE 
 
 
 Volitelne:
