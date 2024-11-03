@@ -5,7 +5,7 @@ DONE DONE DONE 2. hrac muze vzit figurku i kdyz je chranena (vice figurek v jedn
 DONE DONE DONE 4. Hrac si muze vybrat s kterou figurkou tahat pouze jednou. Pokud si rozmyslel tah a chce si zvolit jinou figurku tak nemuze. DONE DONE DONE
 
 Co dodelat:
-1. promotovani na damu
+DONE DONE DONE 1. promotovani na damu DONE DONE DONE
 2. vyherni obrazovka a restart hry
 
 
