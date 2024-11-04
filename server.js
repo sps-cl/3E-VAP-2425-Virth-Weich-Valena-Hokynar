@@ -32,7 +32,11 @@ io.on("connection", (socket) => {
 
   socket.on("win", (winner) => {
     io.emit("win", (winner));
-  })
+  });
+
+  socket.on("switchPlayer", (data) => {
+    io.emit("switchPlayerServer", (data));
+  });
 
 });
 

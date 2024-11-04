@@ -5,6 +5,7 @@ const cols = 8;
 let selectedPiece = null;
 let blackPieceNum = 12;
 let whitePieceNum = 12;
+let currentPlayer = 'white';
 
 // vytvoření tabulky
 function createBoard() {
@@ -165,11 +166,9 @@ function handleMove(startCell, endCell, piece) {
   switchPlayer();
 }
 
-// Funkce, ktera konroluje kdo je na tahu
-let currentPlayer = 'white';
 
 function switchPlayer() {
-  currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+  socket.emit("switchPlayer", "ano");
 }
 
 function isCurrentPlayerPiece(piece) {
@@ -268,6 +267,10 @@ socket.on("win", (winner) => {
     const overlayWhite = document.getElementsByClassName("winningOverlayWhite")[0];
     overlayWhite.style.display = "flex";
   }
+})
+
+socket.on("switchPlayerServer", (data) => {
+  currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
 })
 
 createBoard();
